@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "Water-flow-meter",
+			"path": "."
+		},
+		{
+			"name": "waterflowbackend",
+			"path": "../Downloads/waterflowbackend"
+		}
+	],
+	"settings": {}
+}
