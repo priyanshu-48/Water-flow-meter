@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../Water-flow-meter"
+		},
+		{
+			"path": "waterflowbackend"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Water-flow-meter",
+		"java.project.sourcePaths": [
+			"client"
+		]
+	}
+}
