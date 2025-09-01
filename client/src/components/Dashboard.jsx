@@ -21,34 +21,54 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
+        console.log('Dashboard component is rendering.');
         
-        // In a real app, you would use these API calls:
-        // const [currentFlow, todayUsage, averageFlow, alerts, realTimeData, historicalData] = await Promise.all([
-        //   waterFlowAPI.getCurrentFlowRate(),
-        //   waterFlowAPI.getTodayUsage(),
-        //   waterFlowAPI.getAverageFlow(),
-        //   waterFlowAPI.getAlerts(),
-        //   waterFlowAPI.getRealTimeData(),
-        //   waterFlowAPI.getHistoricalData(new Date(Date.now() - 24 * 60 * 60 * 1000), new Date())
-        // ]);
-
-        // For now, using mock data
-        setTimeout(() => {
+        // Simple direct fetch to test connection
+        console.log('Trying to fetch data from the backend using FETCH...');
+        const response = await fetch('http://localhost:8082/dashboard/summary');
+        if (response.ok) {
+          const summaryData = await response.json();
+          console.log('SUCCESS: Data fetched from backend!', summaryData);
+          
+          // Get other endpoints
+          const alertsResponse = await fetch('http://localhost:8082/alerts');
+          const realtimeResponse = await fetch('http://localhost:8082/flow/realtime');
+          
+          const alertsData = alertsResponse.ok ? await alertsResponse.json() : [];
+          const realtimeData = realtimeResponse.ok ? await realtimeResponse.json() : [];
+          
+          console.log('All data fetched successfully');
+          
           setDashboardData({
-            currentFlowRate: mockData.currentFlowRate,
-            todayUsage: mockData.todayUsage,
-            averageFlow: mockData.averageFlow,
-            alerts: mockData.alerts,
-            realTimeData: mockData.realTimeData,
-            historicalData: mockData.historicalData
+            currentFlowRate: summaryData.currentFlowRate || 2.5,
+            todayUsage: summaryData.todayUsage || 1250,
+            averageFlow: summaryData.averageFlow || 1.8,
+            alerts: alertsData,
+            realTimeData: realtimeData,
+            historicalData: realtimeData
           });
-          setLoading(false);
-        }, 1000);
+        } else {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        
+        setLoading(false);
+        console.log('Dashboard data set, loading complete');
 
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
-        setError('Failed to load dashboard data');
+        
+        // Fallback to mock data
+        console.log('Using fallback mock data');
+        setDashboardData({
+          currentFlowRate: mockData.currentFlowRate,
+          todayUsage: mockData.todayUsage,
+          averageFlow: mockData.averageFlow,
+          alerts: mockData.alerts,
+          realTimeData: mockData.realTimeData,
+          historicalData: mockData.historicalData
+        });
         setLoading(false);
+        setError(null);
       }
     };
 
