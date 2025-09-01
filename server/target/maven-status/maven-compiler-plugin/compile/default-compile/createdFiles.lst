@@ -1,0 +1,4 @@
+com\harsha\waterflow\entity\FlowMeasurement.class
+com\harsha\waterflow\repository\FlowMeasurementRepository.class
+com\harsha\waterflow\WaterflowBackendApplication.class
+com\harsha\waterflow\controller\FlowMeasurementController.class
